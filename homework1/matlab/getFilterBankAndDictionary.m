@@ -14,7 +14,11 @@ fprintf('========Get Filter Dictionary========\n');
 
 filter_responses = [];
 % take the image with a certain name
-for i = 1:length(image_names)
+
+
+matlabpool('local',12);
+
+parfor i = 1:length(image_names)
 	% read the image
 	I = imread(image_names{i});
 	% applying the filter on different images
@@ -24,6 +28,10 @@ for i = 1:length(image_names)
 	[filter_responses] = [filter_responses;filter_response(idx,:)]; 
 	fprintf('#%d/%d image %s is done\n', i,length(image_names), image_names{i});
 end
+
+
+matlabpool close
+
 
 
 assert(size(filter_responses,1) == 150*length(image_names), 'rows of filter_responses is %d, but should be %d', size(filter_responses,1), 150*length(image_names));
